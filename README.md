@@ -1,1 +1,1 @@
-# pruebas
+Escuela de "Cursos alternativos"
