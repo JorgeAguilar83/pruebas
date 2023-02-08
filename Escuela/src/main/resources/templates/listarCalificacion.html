@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<head>
+</head>
+	<body>		
+		<header th:replace="layout/layout :: header"></header>		
+		<div class="container py-4">
+			<div class="card bg-light">
+				<div class="card-header" th:text="${titulo}"></div>
+				<div class="card-body">					
+					<form th:action="@{/formulario}" th:object="${buscarDTO}" method="post">	
+					<div class="form-group row">
+						<label for="idAlumno" class="col-sm-2 col-form-label" >Id. Alumno</label>
+						<div class="col-sm-2">
+							<input type="number" min="1" th:field="*{idAlumno}" class="form-control"
+								th:errorclass="'form-control alert-danger'" required="required" /> 
+								<small class="form-text text-danger" th:if="${#fields.hasErrors('idAlumno')}" th:errors="*{idAlumno}"></small> 
+						</div>
+						<label for="idMateria" class="col-sm-2 col-form-label" >Id. Materia</label>
+						<div class="col-sm-2">
+							<input type="number" min="1" th:field="*{idMateria}" class="form-control" 
+							th:errorclass="'form-control alert-danger'" required="required" /> 
+								<small class="form-text text-danger" th:if="${#fields.hasErrors('idMateria')}" th:errors="*{idMateria}"></small> 
+						</div>
+						<label for="calificacion" class="col-sm-2 col-form-label" >Calificación</label>
+						<div class="col-sm-2">
+							<input type="number" min="0.01" step="0.01" max="10" th:field="*{calificacion}" class="form-control" 
+							th:errorclass="'form-control alert-danger'" required="required" /> 
+								<small class="form-text text-danger" th:if="${#fields.hasErrors('calificacion')}" th:errors="*{calificacion}"></small>  
+						</div>
+						<div class="col-sm-2">
+							<input type="submit" th:value="${nombreBoton}"
+									class="btn btn-primary" />
+						</div>
+						</div>
+					</form>	
+					
+					<table class="table table-striped table-bordered">
+						<thead class="thead-inverse">
+							<tr>
+								<th>id</th>
+								<th>Nombre</th>
+								<th>Ape. Paterno</th>
+								<th>Ape. Materno</th>
+								<th>Fecha</th>
+								<th>Matería</th>
+								<th>Calificación</th>
+								<th>Actualizar</th>
+								<th>Eliminar</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="calificacion: ${calificaciones.listCalificacionAluMat}">
+								<td th:text="${calificacion.id}"></td>
+								<td th:text="${calificacion.alumno.nombre}"></td>
+								<td th:text="${calificacion.alumno.apPaterno}"></td>
+								<td th:text="${calificacion.alumno.apMaterno}"></td>
+								<td th:text="${calificacion.fechaRegistro}"></td>
+								<td th:text="${calificacion.materia.nombre}"></td>	
+								<td th:text="${calificacion.calificacion}"></td>								
+								<td >
+									<h4 class="card-title">
+										<a class="btn btn-success btn-xs"
+										th:href="@{/actualizar/} + ${calificacion.id}" 
+										th:text="'Actualizar'"></a>
+									</h4>
+								</td>
+										
+								<td >
+									<h4 class="card-title">
+										<a class="btn btn-danger btn-xs"
+											th:href="@{/eliminar/} + ${calificacion.id}" 
+											th:text="'Eliminar'"
+											onclick="return confirm('Estas seguro que quieres eliminar la calificación');"></a>
+									</h4>
+								</td>
+							</tr>
+						</tbody>
+						<tfoot>
+    						<tr>
+								<th colspan="5"></th>
+								<th>Promedio</th>
+								<th th:text="${#numbers.formatDecimal(calificaciones.promedio, 0, 'COMMA', 2, 'POINT')}"></th>
+							</tr>
+  						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<footer th:replace="layout/layout :: footer"></footer>
+	</body>
+</html>
